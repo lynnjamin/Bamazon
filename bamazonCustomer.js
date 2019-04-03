@@ -34,6 +34,7 @@ var connection = mysql.createConnection({
        }
        console.log(table.toString());
       
+       /////// INQUIRER
        inquirer
        .prompt(
        {
@@ -54,7 +55,9 @@ var connection = mysql.createConnection({
         }
       }
 
-    inquirer.prompt(
+      //// INQUIRER 
+    inquirer
+    .prompt(
     {
       name: "askQuantity",
       type: "input",
@@ -66,11 +69,21 @@ var connection = mysql.createConnection({
         return false;
       }
     }).then(function(answer) {
-      
+      var chosenIndex = chosenItem - 1;
+      console.log(res[chosenIndex].stock_quantity)
+           if(parseInt(answer.askQuantity) > res[chosenIndex].stock_quantity){
+             console.log("Sorry we need to restock..")  
+           } else {
+             boughtItem();
+           }
     })
        connection.end();
-      // }
       })
 
    })
+}
+
+function boughtItem(){
+
+
 }
