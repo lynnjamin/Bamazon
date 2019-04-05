@@ -15,7 +15,7 @@ connection.connect(function (err) {
   showItems();
 })
 
-// MAIN FUNCTION //
+// DISPLAY TABLE //
 function showItems() {
   console.log("Welcome to Scama... er.. Bamazon!\n");
   connection.query("SELECT * FROM products", function (err, res) {
@@ -32,12 +32,12 @@ function showItems() {
       );
       idArray.push(res[i].id);
     }
-    console.log(table.toString());
+    console.log(table.toString());    
     main();
   })
 }
 
-
+// ASK WHAT TO DO //
 function main() {
   inquirer
     .prompt([{
@@ -54,8 +54,7 @@ function main() {
     })
 }
 
-
-
+// ID AND QUANTITY PURCHASE //
 function askUser() {
   inquirer
     .prompt([
@@ -75,31 +74,37 @@ function askUser() {
         type: "input",
         message: "How many of the items do you want?",
         validate: function (value) {
+          //needs to be a valid id
           if (isNaN(value) === false) {
             return true;
-          }
-          return false;
+        //   } else if (parseInt(value) > res) {
+        //     console.log(res)
+        //     // console.log("That is not a valid id number, please enter a valid number")
+        //   return false;
+        // } else {
+        //   console.log("Pick a number between 1-10")
+        //   return false;
+        } 
+        return false;
         }
       }]).then(function (answer) {
         connection.query("SELECT * FROM products where id = ?", [answer.askId], function (err, res) {
           if (err) throw err;
-          chosenItem = parseInt(answer.askId);
-
-          var chosenItem;
+          
+          var chosenItem = parseInt(answer.askId);
           var chosenIndex = chosenItem - 1;
-
 
           if (parseInt(answer.askQuantity) > res[0].stock_quantity) {
             console.log("Sorry our manager forgot to restock..");
+            main();
           } else {
-            //  console.log(res[0].id)
             connection.query("UPDATE products SET stock_quantity = ? WHERE id = ?",
               [parseInt(res[0].stock_quantity) - parseInt(answer.askQuantity), parseInt(res[0].id)]
               , function (err, res) {
                 if (err) throw err;
                 connection.query("SELECT * FROM products", function (err, res) {
-                  console.log("You've spent: $" + res[chosenIndex].price * answer.askQuantity);
-                  main();
+                 showItems();
+                 console.log("You've spent: $" + res[chosenIndex].price * answer.askQuantity);
                 })
               })
             }
