@@ -20,7 +20,7 @@ VALUE ("HD TV", "electronics", 778.98, 23),
 ("rake", "garden", 26.55, 64),
 ("espresso machine", "kitchen appliances", 259.99, 13),
 ("potato chips variety pack", "grocery", 19.89, 169),
-("codenames", "toys &amp; games", 16.88, 65),
+("codenames", "toys and games", 16.88, 65),
 ("stapler", "office", 9.86, 117);
 
 SELECT * FROM products;

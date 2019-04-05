@@ -1,7 +1,7 @@
 var mysql = require('mysql');
 var inquirer = require('inquirer');
 var Table = require('cli-table');
-
+var counter;
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
@@ -17,15 +17,17 @@ connection.connect(function (err) {
 
 // DISPLAY TABLE //
 function showItems() {
-  console.log("Welcome to Scama... er.. Bamazon!\n");
   connection.query("SELECT * FROM products", function (err, res) {
     if (err) throw err;
+
+    
     //display products with cli-table
     var table = new Table({
       head: ["ID", "PRODUCT NAME", "DEPARTMENT NAME", "PRICE", "STOCK"]
       , colWidths: [5, 30, 20, 10, 10]
     });
     var idArray = [];
+    counter= idArray.length;
     for (var i = 0; i < res.length; i++) {
       table.push(
         [res[i].id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]
@@ -55,7 +57,7 @@ function main() {
 }
 
 // ID AND QUANTITY PURCHASE //
-function askUser() {
+function askUser(res) {
   inquirer
     .prompt([
       {
@@ -65,8 +67,13 @@ function askUser() {
         validate: function (value) {
           if (isNaN(value) === false) {
             return true;
+          } else if (parseInt(value) > counter) {
+            console.log("Please enter a valid id")
+            return false;
+          } else {
+            console.log("Not valid")
+            return false;
           }
-          return false;
         }
       },
       {
@@ -77,13 +84,6 @@ function askUser() {
           //needs to be a valid id
           if (isNaN(value) === false) {
             return true;
-        //   } else if (parseInt(value) > res) {
-        //     console.log(res)
-        //     // console.log("That is not a valid id number, please enter a valid number")
-        //   return false;
-        // } else {
-        //   console.log("Pick a number between 1-10")
-        //   return false;
         } 
         return false;
         }
@@ -111,3 +111,4 @@ function askUser() {
           })
         })
       }
+	

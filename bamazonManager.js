@@ -18,7 +18,6 @@ var connection = mysql.createConnection({
 
 
    function showItems() {
-     console.log("Welcome to Scama... er.. Bamazon!\n");
      connection.query("SELECT * FROM products", function (err, res) {
        if (err) throw err;
        //display products with cli-table
@@ -40,7 +39,7 @@ var connection = mysql.createConnection({
 
 
    function viewLow() {
-
+connection.query()
 
    }
 
@@ -53,7 +52,7 @@ var connection = mysql.createConnection({
 
    }
 
-   
+
    function listChoices() {
         inquirer.prompt([{
           name: "menu",
