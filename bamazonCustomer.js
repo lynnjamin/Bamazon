@@ -16,6 +16,7 @@ connection.connect(function (err) {
 })
 
 // DISPLAY TABLE //
+console.log("\r\nWelcome to Bamazon!\r\n");
 function showItems() {
   connection.query("SELECT * FROM products", function (err, res) {
     if (err) throw err;
@@ -61,32 +62,31 @@ function askUser(res) {
   inquirer
     .prompt([
       {
-        name: "askId",
-        type: "input",
-        message: "Pick an ID",
-        validate: function (value) {
-          if (isNaN(value) === false) {
-            return true;
-          } else if (parseInt(value) > counter) {
-            console.log("Please enter a valid id")
-            return false;
-          } else {
-            console.log("Not valid")
-            return false;
+      name: "askId",
+      type: "input",
+      message: "Pick an ID",
+      validate: function (value) {
+        if (isNaN(value) === false) {
+          return true;
+        } else if (parseInt(value) > counter) {
+          console.log("Please enter a valid id")
+          return false;
+        } else {
+          console.log("Not valid")
+          return false;
           }
         }
       },
       {
-        name: "askQuantity",
-        type: "input",
-        message: "How many of the items do you want?",
-        validate: function (value) {
-          //needs to be a valid id
-          if (isNaN(value) === false) {
-            return true;
-        } 
-        return false;
-        }
+      name: "askQuantity",
+      type: "input",
+      message: "How many of the items do you want?",
+      validate: function (value) {
+        if (isNaN(value) === false) {
+          return true;
+      } 
+      return false;
+      }
       }]).then(function (answer) {
         connection.query("SELECT * FROM products where id = ?", [answer.askId], function (err, res) {
           if (err) throw err;
@@ -94,8 +94,12 @@ function askUser(res) {
           var chosenItem = parseInt(answer.askId);
           var chosenIndex = chosenItem - 1;
 
-          if (parseInt(answer.askQuantity) > res[0].stock_quantity) {
-            console.log("Sorry our manager forgot to restock..");
+          if(res.length==0) {
+            console.log("\r\nThat item is not on our list!\r\n");
+            main();
+          } else if
+            (parseInt(answer.askQuantity) > res[0].stock_quantity) {
+            console.log("\r\nSorry our manager forgot to restock..\r\n");
             main();
           } else {
             connection.query("UPDATE products SET stock_quantity = ? WHERE id = ?",
@@ -103,12 +107,12 @@ function askUser(res) {
               , function (err, res) {
                 if (err) throw err;
                 connection.query("SELECT * FROM products", function (err, res) {
-                 showItems();
-                 console.log("You've spent: $" + res[chosenIndex].price * answer.askQuantity);
+                showItems();
+                console.log("\r\nYou spent: $" + res[chosenIndex].price * answer.askQuantity + "\r\n");
                 })
               })
-            }
-          })
+          }
         })
-      }
+      })
+  }
 	
