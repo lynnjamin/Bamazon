@@ -55,11 +55,59 @@ var connection = mysql.createConnection({
 
 
    function addToInventory(){
+    inquirer
+    .prompt([
+      {
+      name: "idChoice",
+      type: "input",
+      message: "What ID do you want to restock?",
+      validate: function(value) {
+        if (isNaN(value) === false) {
+          return true;
+          } else {
+          return false;
+          }
+        }
+      },
+      {
+      name: "quantity",
+      type: "input",
+      message: "How much do we need to restock?",
+      validate: function(value) {
+        if (isNaN(value) === false) {
+          return true;
+        } else if (parseInt(value) > 0) {
+          console.log("Please enter a valid ID")
+          } else {
+          return false;
+          }
+        }
+    }]).then(function(answer) {
+        connection.query("SELECT * FROM products WHERE ?", {id: answer.idChoice}, function (err, res) {
+          if (err) throw err;
 
-   }
+          if(res.length === 0) {
+            console.log(("\r\nYou should know your inventory better.. pick a valid ID\r\n"));
+            listChoices();
+          } else {
+            var chosenProduct = res[0].product_name;
+            console.log(chosenProduct)        
+            connection.query("UPDATE products SET ? WHERE ?", 
+            [{ stock_quantity: res[0].stock_quantity + parseInt(answer.quantity)},
+              { id: answer.idChoice}],
+              function(err){
+                if (err) throw err;
+                console.log("\r\nYou successfully restocked " + answer.quantity + " " + chosenProduct + "!\r\n");
+                listChoices();
+              }
+              );
+            }
+        });
+      })
+   }  
+
 
    function addNewProduct(){
-
 
    }
 
@@ -76,9 +124,9 @@ var connection = mysql.createConnection({
           } else if (answer.menu === "VIEW LOW INVENTORY") {
                viewLow();
           } else if (answer.menu === "ADD TO INVENTORY") {
-
+               addToInventory();
           } else if (answer.menu === "ADD NEW PRODUCT") {
-
+              addNewProduct()
           } else {
                connection.end();
           }

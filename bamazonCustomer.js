@@ -16,7 +16,7 @@ connection.connect(function (err) {
 })
 
 // DISPLAY TABLE //
-console.log("\r\nWelcome to Bamazon!\r\n");
+console.log("\r\nWelcome to Bamazon! We have very important things here.\r\n");
 function showItems() {
   connection.query("SELECT * FROM products", function (err, res) {
     if (err) throw err;
@@ -95,7 +95,7 @@ function askUser(res) {
           var chosenIndex = chosenItem - 1;
 
           if(res.length==0) {
-            console.log("\r\nThat item is not on our list!\r\n");
+            console.log("\r\nWhat ID?\r\n");
             main();
           } else if
             (parseInt(answer.askQuantity) > res[0].stock_quantity) {
@@ -108,7 +108,7 @@ function askUser(res) {
                 if (err) throw err;
                 connection.query("SELECT * FROM products", function (err, res) {
                 showItems();
-                console.log("\r\nYou spent: $" + res[chosenIndex].price * answer.askQuantity + "\r\n");
+                console.log("\r\nThank you! You spent: $" + res[chosenIndex].price * answer.askQuantity + "\r\n");
                 })
               })
           }
