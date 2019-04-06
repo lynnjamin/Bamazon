@@ -17,6 +17,7 @@ var connection = mysql.createConnection({
    })
 
 
+   var idArray = [];
    function showItems() {
      connection.query("SELECT * FROM products", function (err, res) {
        if (err) throw err;
@@ -25,7 +26,6 @@ var connection = mysql.createConnection({
          head: ["ID", "PRODUCT NAME", "DEPARTMENT NAME", "PRICE", "STOCK"]
          , colWidths: [5, 30, 20, 10, 10]
        });
-       var idArray = [];
        for (var i = 0; i < res.length; i++) {
          table.push(
            [res[i].id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]
@@ -37,11 +37,22 @@ var connection = mysql.createConnection({
      })
    }
 
-
    function viewLow() {
-connection.query()
+     //look in database for items less or equal to 5 and display them
+    connection.query("SELECT * FROM products WHERE stock_quantity<=?",[5], function (err, res) { 
+      if (err) throw err;
+      var table = new Table({
+        head: ["ID", "PRODUCT NAME", "DEPARTMENT NAME", "PRICE", "STOCK"]
+        , colWidths: [5, 30, 20, 10, 10]
+      });
+      for(var i = 0; i < res.length; i++) {
+          table.push([res[i].id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]);
+      }
+      console.log(table.toString());   
+      listChoices();
+  })
+}
 
-   }
 
    function addToInventory(){
 
@@ -63,7 +74,7 @@ connection.query()
           if(answer.menu === "VIEW PRODUCTS") {
                showItems();
           } else if (answer.menu === "VIEW LOW INVENTORY") {
-               
+               viewLow();
           } else if (answer.menu === "ADD TO INVENTORY") {
 
           } else if (answer.menu === "ADD NEW PRODUCT") {
