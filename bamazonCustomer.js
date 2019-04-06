@@ -15,13 +15,14 @@ connection.connect(function (err) {
   showItems();
 })
 
+///////////////////
 // DISPLAY TABLE //
+///////////////////
 console.log("\r\nWelcome to Bamazon! We have very important things here.\r\n");
 function showItems() {
   connection.query("SELECT * FROM products", function (err, res) {
     if (err) throw err;
 
-    
     //display products with cli-table
     var table = new Table({
       head: ["ID", "PRODUCT NAME", "DEPARTMENT NAME", "PRICE", "STOCK"]
@@ -40,7 +41,9 @@ function showItems() {
   })
 }
 
+////////////////////
 // ASK WHAT TO DO //
+////////////////////
 function main() {
   inquirer
     .prompt([{
@@ -57,7 +60,9 @@ function main() {
     })
 }
 
-// ID AND QUANTITY PURCHASE //
+////////////////////////////////////
+// PROMPT USER OF ID AND QUANTITY //
+////////////////////////////////////
 function askUser(res) {
   inquirer
     .prompt([
