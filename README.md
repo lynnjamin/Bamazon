@@ -27,13 +27,28 @@ node bamazonManager.js
 ## Customer
 After running `bamazonCustomer.js` the following will occur:
 1. A table of the most current inventory will be displayed. It contains product names, IDs, departments, prices, and stock.
-2. You will be prompted to enter the ID of the product you want to buy.
-3. You will be asked how many units of that item want to buy.
-4. The table will be updated and your total of how much you spent will be displayed. 
-**NOTE**: You cannot buy more than what the inventory has.
+2. You will be asked to `PURCHASE` or `QUIT`.
+     1. Purchase
+          - You will be prompt to enter the ID of the product you want to buy and how many units of that item want to buy.
+          - The table will be updated and your total of how much you spent will be displayed.
+          - **NOTE**: You cannot buy more than what the inventory has.
+     2. Quit
+          - will exit the application.
+
 
 
 <img src='images/customer.gif'><br>
+
+
+## Manager 
+After running `bamazonManager.js` you will be able to do one of the followings:
+1. `VIEW PRODUCTS` will display the same current table that is shared by `bamazonCustomer.js`.
+2. `VIEW LOW INVENTORY` will display items that are less or equal to 5.
+3. `ADD TO INVENTORY` allows you to restock 1 product and the table will update according to the changes in stock.
+4. `ADD NEW PRODUCT` allows you to create an entire new item to the table.
+5. `QUIT` will exit the application
+
+<img src='images/manager.gif'><br>
 
 ## Built With
 - [MySQL](https://www.mysql.com/)
