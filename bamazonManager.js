@@ -105,11 +105,13 @@ var connection = mysql.createConnection({
         });
       })
    }  
-
+  
 
    function addNewProduct(){
-
-   }
+    connection.query("SELECT department_name FROM departments",function (err, res) {
+      if (err) throw err;
+   })
+  }
 
 
    function listChoices() {
@@ -128,7 +130,7 @@ var connection = mysql.createConnection({
           } else if (answer.menu === "ADD NEW PRODUCT") {
               addNewProduct()
           } else {
-               connection.end();
+              connection.end();
           }
         })
-   }
+      }
